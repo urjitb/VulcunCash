@@ -23,7 +23,7 @@ $("#submit2").click(function () {
             document.cookie = "token="+data.token +"; SameSite=Strict; Secure";
             
     
-            $('#result').append("<b>Logged user: " + JSON.stringify(data) + "</b></br>")
+            window.location.replace("/me");
         });
 });
 
