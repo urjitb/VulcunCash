@@ -80,7 +80,7 @@ app.post('/register', async (req, res) => {
     console.log("saving")
     //save password
     console.log(user)
-    await user.save().then((result)=>{console.log(result)})
+    await user.save().then((result) => { console.log(result) })
     const payload = {
         user: {
             id: user.id
@@ -90,8 +90,8 @@ app.post('/register', async (req, res) => {
     jwt.sign(
         payload,
         authToken, {
-            expiresIn: 10000
-        },
+        expiresIn: 10000
+    },
         (err, token) => {
             if (err) throw err;
             res.status(200).json({
@@ -108,47 +108,47 @@ app.post('/login', async (req, res) => {
     console.log(email)
     let user = await Users.findOne({
         email
-      });
-      if (!user)
+    });
+    if (!user)
         return res.status(400).json({
-          message: "User Not Exist"
+            message: "User Not Exist"
         });
 
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch)
-          return res.status(400).json({
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch)
+        return res.status(400).json({
             message: "Incorrect Password !"
-          });
-  
-        const payload = {
-          user: {
+        });
+
+    const payload = {
+        user: {
             id: user.id
-          }
-        };
-        console.log("payload = " + JSON.stringify(payload))
-        jwt.sign(
-          payload,
-          authToken,
-          {
+        }
+    };
+    console.log("payload = " + JSON.stringify(payload))
+    jwt.sign(
+        payload,
+        authToken,
+        {
             expiresIn: 3600
-          },
-          (err, token) => {
+        },
+        (err, token) => {
             if (err) throw err;
             res.status(200).json({
-              token
+                token
             });
-          }
-        );
+        }
+    );
 })
 
-app.get("/me", auth , async (req, res) => {
+app.get("/me", auth, async (req, res) => {
     try {
-      const user = await Users.findById(req.user.id);
-      res.json(user);
+        const user = await Users.findById(req.user.id);
+        res.json(user);
     } catch (e) {
-      res.send({ message: "Error in Fetching user" });
+        res.send({ message: "Error in Fetching user" });
     }
-  });
+});
 
 app.post('/delete', (req, res) => {
     Users.deleteMany(req.body)
