@@ -1,41 +1,4 @@
-$("#submit").click(function () {
-
-    $.post("/register",
-        {
-            username: $("[name='regu']").val(),
-            password: $("[name='regp']").val(),
-            email: $("[name='rege']").val()
-        },
-        function (data, status) {
-
-            $('#logged-in').append("<b>" + JSON.stringify(data) + "</b></br>")
-        });
-});
-$("#submit2").click(function () {
-
-    $.post("/login",
-        {
-            email: $('#loginName').val(),
-            password: $('#loginPass').val()
-        },
-        function (data, status) {
-            //https://developer.mozilla.org/docs/Web/HTTP/Headers/Set-Cookie/SameSite
-            document.cookie = "token="+data.token +"; SameSite=Strict; Secure";
-            
-    
-            window.location.replace("/me");
-        });
-});
-
-$("#delete").click(function () {
-
-    $.post("/delete",
-        {
-            name: $('#delname').val(),
-
-        },
-        function (data, status) {
-
-            $('#result').append("<b>" + JSON.stringify(data) + "</b></br>")
-        });
+$("#logout").click(function () {
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.replace("/");
 }); 

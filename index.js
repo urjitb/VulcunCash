@@ -41,11 +41,13 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 
 app.get('/', function (req, res, next) {
-    Users.find({}).then((result) => {
-
-        res.render('home', { users: result });
-    })
+    res.render('home');
 });
+
+app.get('/register', function (req, res, next) {
+    res.render('register');
+});
+
 
 app.post('/register', async (req, res) => {
     //get variables from form
@@ -143,10 +145,10 @@ app.post('/login', async (req, res) => {
     );
 })
 
-app.get("/me", auth, async (req, res) => {
+app.get("/dashboard", auth, async (req, res) => {
     try {
         const user = await Users.findById(req.user.id);
-        res.json(user);
+        res.render('dashboard',{User: user.toObject()});
     } catch (e) {
         res.send({ message: "Error in Fetching user" });
     }

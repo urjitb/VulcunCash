@@ -1,5 +1,34 @@
-<h1>Registration</h1>
-Email: <input type="text" name="rege"></br>
-Username: <input type="text" name="regu"></br>
-Password: <input type="text" name="regp"></br></br>
-<button id="submit">Register</button>
+<div class="page-form">
+
+    <input type="hidden" name="fingerprint" id="input-fingerprint">
+    <div class="body-content">
+        <div style="text-align: center; background: #e9e9e9;" class="header-content">
+            <h1>Registration.</h1>
+        </div>
+        <div class="form-group">
+            <div class="input-icon right"><i class="fa fa-envelope"></i><input type="text" placeholder="Email" id="rege"
+                    name="rege" class="form-control" value="" required=""></div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-icon right"><i class="fa fa-user"></i><input type="text" placeholder="Username" id="regu"
+                    name="regu" class="form-control" required=""></div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-icon right"><i class="fa fa-key"></i><input type="password" placeholder="Password"
+                    id="regp" name="regp" class="form-control" required=""></div>
+        </div>
+        <div class="form-group pull-left">
+            Already a member? <a style="color:#7dcc93;" id="btn-register" href="/">Login</a>
+        </div>
+        <div class="form-group pull-right">
+            <button type="submit" name="submit" id="submit" class="btn btn-success">Register &nbsp;<i
+                    class="fa fa-chevron-circle-right"></i></button>
+        </div>
+
+
+        <div class="clearfix"></div>
+    </div>
+
+</div>
