@@ -15,7 +15,6 @@ $("#submit").click(function () {
 
             window.location.replace("/dashboard");
         }).done(function() {
-            alert( "second success" );
           })
           .fail(function(data) {
             data.responseJSON.errors.forEach(element => {

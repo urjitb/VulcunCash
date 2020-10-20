@@ -16,5 +16,8 @@ $("#submit2").click(function () {
             
     
             window.location.replace("/dashboard");
+        }).fail((data)=>{
+                $("#header-content").after("<br><div class=\"alert alert-danger\">The username/email and password combination does not exist.</div>")
+                    console.log(JSON.stringify(data))
         });
 });
