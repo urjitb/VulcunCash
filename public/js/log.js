@@ -3,7 +3,7 @@ if (typeof $.cookie('token') === 'undefined'){
    } else {
     window.location.replace("/dashboard");
    }
-$("#submit2").click(function () {
+$("#submit").click(function () {
 
     $.post("/login",
         {
