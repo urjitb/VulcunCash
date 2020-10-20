@@ -9,11 +9,13 @@ const path = require('path');
 const bcrypt = require('bcrypt')
 const jwt = require("jsonwebtoken")
 const auth = require("./auth");
+const dotenv = require('dotenv').config();
+
 var cookieParser = require('cookie-parser')
 
 
-const authToken = 'qwnelqwnelaksnje1k2n3k12n312931209he192heoje12j'
-const DB_URL = "mongodb+srv://dahiwala:string32@cluster0.p83ya.mongodb.net/curdapp?retryWrites=true&w=majority"
+const authToken = process.env.authToken
+const DB_URL = process.env.DB_URL
 
 const conn = mongoose.connect(DB_URL, {
     useUnifiedTopology: true,
