@@ -10,6 +10,7 @@ const bcrypt = require('bcrypt')
 const jwt = require("jsonwebtoken")
 const auth = require("./auth");
 const dotenv = require('dotenv').config();
+const { body, validationResult } = require('express-validator');
 
 var cookieParser = require('cookie-parser')
 
@@ -49,14 +50,21 @@ app.get('/register', function (req, res, next) {
 });
 
 
-app.post('/register', async (req, res) => {
-    //get variables from form
+app.post('/register', [
+    body('email').isEmail().withMessage("Invalid email"),
+    body('password').isLength({ min: 8 }).withMessage("Invalid password minimum characters: 8")
+  ], async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const {
         username,
         email,
         password
     } = req.body;
-
     //check if user already exists
     let user = await Users.findOne({
         email
