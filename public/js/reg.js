@@ -12,7 +12,7 @@ $("#submit").click(function () {
             email: $("[name='email']").val()
         },
         function (data, status) {
-
+            document.cookie = "token="+data.token +"; SameSite=Strict; Secure; HttpOnly";
             window.location.replace("/dashboard");
         }).done(function() {
           })
@@ -20,6 +20,5 @@ $("#submit").click(function () {
             data.responseJSON.errors.forEach(element => {
                 $('#'+element.param).after("<br><div class=\"alert alert-danger\">"+element.msg+"</div>")
             });
-           
           });
 });

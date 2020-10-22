@@ -9,6 +9,7 @@ const path = require('path');
 const bcrypt = require('bcrypt')
 const jwt = require("jsonwebtoken")
 const auth = require("./auth");
+const adminAuth = require("./adminAuth");
 const dotenv = require('dotenv').config();
 const { body, validationResult } = require('express-validator');
 
@@ -38,7 +39,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api', api)
 app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(static(path.join(__dirname, 'public')))
 
 
 app.get('/', function (req, res, next) {
@@ -53,25 +54,25 @@ app.get('/register', function (req, res, next) {
 app.post('/register', [
     body('email').isEmail().withMessage("Invalid email"),
     body('password').isLength({ min: 8 }).withMessage("Invalid password minimum characters: 8")
-  ], async (req, res) => {
-
+], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ errors: errors.array() });
     }
-
     const {
         username,
         email,
         password
     } = req.body;
+
+    Users.updateOne({ email }, { $set: { quote: ["testtt123"] } });
     //check if user already exists
     let user = await Users.findOne({
         email
     });
 
     if (user) {
-        console.log(user)
+        //console.log(user)
         return res.status(400).json({
             msg: "User Already Exists"
 
@@ -82,31 +83,37 @@ app.post('/register', [
     user = new Users({
         username,
         email,
-        password
+        password,
+        role: "user"
     });
     console.log("hashing")
+
     //hash password
     const salt = await bcrypt.genSalt(10);
-    console.log(salt)
+
     user.password = await bcrypt.hash(password, salt);
     console.log("saving")
+
     //save password
-    console.log(user)
+
     await user.save().then((result) => { console.log(result) })
     const payload = {
         user: {
-            id: user.id
+            id: user.id,
+            role: "user"
         }
     };
-    console.log(payload)
     jwt.sign(
         payload,
         authToken, {
-        expiresIn: 10000
+        expiresIn: '9h'
     },
         (err, token) => {
             if (err) throw err;
-            res.status(200).json({
+            res.cookie('token', token, {
+                expires: new Date(Date.now() + 9 * 3600000),
+                sameSite: true
+            }).status(200).json({
                 token
             });
         }
@@ -116,8 +123,7 @@ app.post('/register', [
 app.post('/login', async (req, res) => {
 
     const { email, password } = req.body;
-    console.log(req.body)
-    console.log(email)
+
     let user = await Users.findOne({
         email
     });
@@ -134,7 +140,8 @@ app.post('/login', async (req, res) => {
 
     const payload = {
         user: {
-            id: user.id
+            id: user.id,
+            role: user.role
         }
     };
     console.log("payload = " + JSON.stringify(payload))
@@ -142,13 +149,14 @@ app.post('/login', async (req, res) => {
         payload,
         authToken,
         {
-            expiresIn: 3600
+            expiresIn: '9h'
         },
         (err, token) => {
             if (err) throw err;
-            res.status(200).json({
-                token
-            });
+            res.cookie('token', token, {
+                expires: new Date(Date.now() + 9 * 3600000),
+                sameSite: true
+            }).status(200).redirect('/dashboard')
         }
     );
 })
@@ -156,22 +164,22 @@ app.post('/login', async (req, res) => {
 app.get("/dashboard", auth, async (req, res) => {
     try {
         const user = await Users.findById(req.user.id);
-        res.render('dashboard',{User: user.toObject()});
+        res.render('dashboard', { User: user.toObject() });
     } catch (e) {
         res.send({ message: "Error in Fetching user" });
     }
 });
 
-app.post('/delete', (req, res) => {
-    Users.deleteMany(req.body)
-        .then((result) => {
+app.get("/admin", adminAuth, async (req, res) => {
+    try {
+        const user = await Users.findById(req.user.id);
+        res.render('admin');
+        
+    } catch (e) {
 
-            res.send(result)
-        })
-        .catch(error => {
-            console.error(error)
-            res.send(error)
-        })
-})
+        res.send({ message: "Error in Fetching user" });
+  
+    }
+});
 
 app.listen(3000, () => console.log("Started at 3000"));
