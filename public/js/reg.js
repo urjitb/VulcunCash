@@ -6,10 +6,16 @@ if (typeof $.cookie('token') === 'undefined'){
 $("#submit").click(function () {
 
     $.post("/register",
-        {
-            username: $("[name='username']").val(),
-            password: $("[name='password']").val(),
-            email: $("[name='email']").val()
+        {   
+            email: $("#email").val(),
+            password: $("#password").val(),
+            fname: $("#fname").val(),
+            lname: $("#lname").val(),
+            country: $("#country").val(),
+            state: $("#state").val(),
+            wfrom: $("#wfrom").val(),
+            wexp: $("#wexp").val(),
+            prefpayment: $("#prefpayment").val(),
         },
         function (data, status) {
             document.cookie = "token="+data.token +"; SameSite=Strict; Secure; HttpOnly";
@@ -18,7 +24,7 @@ $("#submit").click(function () {
           })
           .fail(function(data) {
             data.responseJSON.errors.forEach(element => {
-                $('#'+element.param).after("<br><div class=\"alert alert-danger\">"+element.msg+"</div>")
+                $('#err').after("<br><div class=\"notification is-danger\">"+element.msg+"</div>")
             });
           });
 });

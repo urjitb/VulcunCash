@@ -4,7 +4,6 @@ if (typeof $.cookie('token') === 'undefined'){
     window.location.replace("/dashboard");
    }
 $("#submit").click(function () {
-
     $.post("/login",
         {
             email: $('#loginName').val(),
@@ -16,7 +15,7 @@ $("#submit").click(function () {
             
             window.location.replace("/dashboard");
         }).fail((data)=>{
-                $("#header-content").after("<br><div class=\"alert alert-danger\">The email and password combination does not exist.</div>")
+                $("#header-content").html("<br><div class=\"notification is-danger\">The email and password combination does not exist.</div>")
                     console.log(JSON.stringify(data))
         });
 });

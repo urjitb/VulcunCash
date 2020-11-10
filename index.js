@@ -12,7 +12,7 @@ const auth = require("./auth");
 const adminAuth = require("./adminAuth");
 const dotenv = require('dotenv').config();
 const { body, validationResult } = require('express-validator');
-
+const axios = require('axios').default;
 var cookieParser = require('cookie-parser')
 
 
@@ -29,13 +29,29 @@ const conn = mongoose.connect(DB_URL, {
 
 const app = express();
 
-app.engine('.hbs', exphbs({
+var hbs = exphbs.create({
     extname: '.hbs',
     layoutsDir: __dirname + '/views/layouts',
-    partialsDir: __dirname + '/views/partials'
-}));
+    partialsDir: __dirname + '/views/partials',
+    // Specify helpers which are only registered on this instance.
+    helpers: {
+        foo: function (str) { return (parseFloat((parseFloat(str, 10) * 0.7 * 100)).toFixed(2)); },
+        foo: function (str) { return (parseFloat(str, 10) ).toFixed(2); },
+        dollarToVc: function (str) { return (parseFloat(parseFloat(str, 10)* 100).toFixed(2)) ; },
+        sysToHuman: function (str) {
+            if (str === "apple") return "Apple Gift Card"
+            else if (str === "google") return "Google Gift Card"
+            else if (str === "amazon") return "Amazon Gift Card"
+            else return "N/A"
+        }
+    }
+});
+
+
+app.engine('.hbs', hbs.engine)
 app.set('view engine', '.hbs');
 app.use(bodyParser.json());
+app.set('trust proxy', true)
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api', api)
 app.use(cookieParser())
@@ -46,10 +62,47 @@ app.get('/', function (req, res, next) {
     res.render('home');
 });
 
-app.get('/register', function (req, res, next) {
-    res.render('register');
+app.get('/login', function (req, res, next) {
+    res.render('login', { layout: 'main' });
 });
 
+app.get('/register', function (req, res, next) {
+    console.log("register page")
+    res.render('register', { layout: 'main' });
+});
+
+app.get('/payments', auth, async function (req, res, next) {
+
+    const user = await Users.findById(req.user.id);
+    res.render('payments', { layout: 'loggedin', User: user.toObject() });
+
+});
+
+app.get('/postb', async (req, res) => {
+    try{
+    const { offer_id, payout, affid } = req.query
+    console.log(affid)
+    let user = await Users.findOne({
+        affid: affid
+    });
+
+
+    console.log(offer_id)
+    console.log(payout)
+
+    user.updateOne({
+        $inc: {
+            balance: payout
+        }
+    }, function (err, user) {
+        if (err) throw err
+        console.log(user)
+        console.log("update user complete")
+    })
+    }catch{}
+    res.status(200)
+
+})
 
 app.post('/register', [
     body('email').isEmail().withMessage("Invalid email"),
@@ -60,13 +113,18 @@ app.post('/register', [
         return res.status(400).json({ errors: errors.array() });
     }
     const {
-        username,
         email,
-        password
+        password,
+        fname,
+        lname,
+        country,
+        state,
+        wfrom,
+        prefpayment,
+        wexp
+
     } = req.body;
 
-    Users.updateOne({ email }, { $set: { quote: ["testtt123"] } });
-    //check if user already exists
     let user = await Users.findOne({
         email
     });
@@ -79,20 +137,29 @@ app.post('/register', [
         });
 
     }
+    let affid = await Users.collection.countDocuments() + 10047
+    console.log(affid)
     //else add it to the Users model
     user = new Users({
-        username,
         email,
         password,
-        role: "user"
+        fname,
+        lname,
+        country,
+        state,
+        wfrom,
+        wexp,
+        affid,
+        prefpayment,
+        role: "user",
+        balance: 10.0
     });
-    console.log("hashing")
 
     //hash password
+
     const salt = await bcrypt.genSalt(10);
 
     user.password = await bcrypt.hash(password, salt);
-    console.log("saving")
 
     //save password
 
@@ -121,9 +188,7 @@ app.post('/register', [
 })
 
 app.post('/login', async (req, res) => {
-
     const { email, password } = req.body;
-
     let user = await Users.findOne({
         email
     });
@@ -131,20 +196,18 @@ app.post('/login', async (req, res) => {
         return res.status(400).json({
             message: "User Not Exist"
         });
-
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch)
         return res.status(400).json({
             message: "Incorrect Password !"
         });
-
     const payload = {
         user: {
             id: user.id,
             role: user.role
         }
     };
-    console.log("payload = " + JSON.stringify(payload))
+
     jwt.sign(
         payload,
         authToken,
@@ -161,24 +224,63 @@ app.post('/login', async (req, res) => {
     );
 })
 
+function getDeviceType(ua) {
+    if (/(ipad)|(android(?!.*mobi))/i.test(ua)) {
+        return "ipad";
+    }
+    if (/(Android)/.test(ua)) return "android";
+    else if (/(iPhone)/.test(ua)) return "iphone";
+    return "desktop";
+};
+
 app.get("/dashboard", auth, async (req, res) => {
     try {
+        let countryCode = 'NA'
         const user = await Users.findById(req.user.id);
-        res.render('dashboard', { User: user.toObject() });
+        axios.get('https://geolocation-db.com/json/09ba3820-0f88-11eb-9ba6-e1dd7dece2b8/' + req.ip)
+            .then(function (response) {
+                console.log(user.affid)
+                axios.get('https://mobverify.com/api/v1/?affiliateid=74530&country=' + 'US' + '&device=' + getDeviceType(req.get('User-Agent')) + '&ctype=15&aff_sub5=' + user.affid, function (data) {
+                }).then(function (response) {
+
+                    let RTET = 0.0
+                    response.data.offers.forEach((offer) => {
+                        RTET +=  parseFloat((offer.payout) * 0.7 * 100);
+                    })
+                    res.render('dashboard', { layout: 'loggedin.hbs', User: user.toObject(), ip: req.iq, offers: response.data, RTET: RTET.toFixed(2) });
+                }).catch((response)={
+                    
+                })
+
+
+            });
+
     } catch (e) {
         res.send({ message: "Error in Fetching user" });
     }
 });
 
+
 app.get("/admin", adminAuth, async (req, res) => {
     try {
         const user = await Users.findById(req.user.id);
         res.render('admin');
-        
+
     } catch (e) {
 
         res.send({ message: "Error in Fetching user" });
-  
+
+    }
+});
+
+app.get("/tutorial", auth, async (req, res) => {
+    try {
+        const user = await Users.findById(req.user.id);
+        res.render('tutorial', { layout: 'loggedin.hbs', User: user.toObject() });
+
+    } catch (e) {
+        res.send({ message: "Error in Fetching user" });
+
     }
 });
 

@@ -1,0 +1,51 @@
+<div class="container" style='text-align:center;'>
+
+    <div id="svg_wrap"></div>
+    <section class='form-container'>
+
+        <label class="label">Registration Details</label>
+
+        <input id='email' type="email" placeholder="Email" />
+
+        <input id='password' type="Password" placeholder="Password" />
+
+    </section>
+
+    <section class='form-container'>
+        <label class="label">Name</label>
+
+        <input id='fname' type="text" placeholder="First Name" />
+        <input id='lname' type="text" placeholder="Last Name" />
+
+        <label class="label">How do you want to get paid?</label>
+
+        <div class="select is-fullwidth">
+            <select id='prefpayment'>
+                <option value="google">Google Play Gift Card</option>
+                <option value="apple">Apple Gift Card</option>
+                <option value="amazon">Amazon Gift Card</option>
+            </select>
+        </div>
+    </section>
+
+    <section class='form-container'>
+        <label class="label">Additional Information</label>
+
+        {{> countryselect}}
+        <p>State</label>
+            <input id='state' type="text" placeholder="State" />
+
+            <label class="label">Experience</label>
+            <input id='wfrom' type="text" placeholder="Where did you find us?" />
+            <input id='wexp' type="text" placeholder="Do you have any experience doing surveys?" />
+
+    </section>
+
+
+
+
+    <div class="button is-info" id="prev">&larr; Previous</div>
+    <div class="button is-info" id="next">Next &rarr;</div>
+    <div class="button is-info" id="submit">Agree and Register</div>
+
+</div>
