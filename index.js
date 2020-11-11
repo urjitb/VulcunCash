@@ -246,7 +246,7 @@ app.get("/dashboard", auth, async (req, res) => {
                     let RTET = 0.0
                     response.data.offers.forEach((offer) => {
                         RTET +=  parseFloat((offer.payout) * 0.7 * 100);
-                    })
+                    })1
                     res.render('dashboard', { layout: 'loggedin.hbs', User: user.toObject(), ip: req.iq, offers: response.data, RTET: RTET.toFixed(2) });
                 }).catch((response)={
                     
