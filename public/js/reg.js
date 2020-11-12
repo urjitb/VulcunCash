@@ -4,7 +4,8 @@ if (typeof $.cookie('token') === 'undefined'){
     window.location.replace("/dashboard");
    }
 $("#submit").click(function () {
-
+    $('#submit').html('<i class="fa fa-refresh fa-lg fa-spin" style="color: #ffffff;"></i>');
+   
     $.post("/register",
         {   
             email: $("#email").val(),
@@ -23,8 +24,9 @@ $("#submit").click(function () {
         }).done(function() {
           })
           .fail(function(data) {
+            $('#submit').html('Register')
             data.responseJSON.errors.forEach(element => {
-                $('#err').after("<br><div class=\"notification is-danger\">"+element.msg+"</div>")
+                $('#header-content').html("<br><div class=\"notification is-danger\">"+element.msg+"</div>")
             });
           });
 });

@@ -9,6 +9,7 @@ const path = require('path');
 const bcrypt = require('bcrypt')
 const jwt = require("jsonwebtoken")
 const auth = require("./auth");
+const lpauth = require("./lpauth");
 const adminAuth = require("./adminAuth");
 const dotenv = require('dotenv').config();
 const { body, validationResult } = require('express-validator');
@@ -36,8 +37,8 @@ var hbs = exphbs.create({
     // Specify helpers which are only registered on this instance.
     helpers: {
         foo: function (str) { return (parseFloat((parseFloat(str, 10) * 0.7 * 100)).toFixed(2)); },
-        foo: function (str) { return (parseFloat(str, 10) ).toFixed(2); },
-        dollarToVc: function (str) { return (parseFloat(parseFloat(str, 10)* 100).toFixed(2)) ; },
+        bar: function (str) { return (parseFloat(str, 10)).toFixed(2); },
+        dollarToVc: function (str) { return (parseFloat(parseFloat(str, 10) * 100).toFixed(2)); },
         sysToHuman: function (str) {
             if (str === "apple") return "Apple Gift Card"
             else if (str === "google") return "Google Gift Card"
@@ -58,8 +59,28 @@ app.use(cookieParser())
 app.use(static(path.join(__dirname, 'public')))
 
 
-app.get('/', function (req, res, next) {
-    res.render('home');
+app.get('/', lpauth, async function (req, res, next) {
+    try {
+        const user = await Users.findById((req.user.id));
+        res.render('landing1', { layout: 'landing', User: user.toObject() });
+    }
+    catch {
+        const user = ""
+        res.render('landing1', { layout: 'landing', User: user });
+    }
+});
+
+app.get('/vc1000', lpauth, async function (req, res, next) {
+
+    try {
+        const user = await Users.findById((req.user.id));
+        res.render('landing1', { layout: 'landing', User: user.toObject() });
+    }
+    catch {
+        const user = ""
+        res.render('landing1', { layout: 'landing',countdown: true, User: user });
+    }
+
 });
 
 app.get('/login', function (req, res, next) {
@@ -79,27 +100,27 @@ app.get('/payments', auth, async function (req, res, next) {
 });
 
 app.get('/postb', async (req, res) => {
-    try{
-    const { offer_id, payout, affid } = req.query
-    console.log(affid)
-    let user = await Users.findOne({
-        affid: affid
-    });
+    try {
+        const { offer_id, payout, affid } = req.query
+        console.log(affid)
+        let user = await Users.findOne({
+            affid: affid
+        });
 
 
-    console.log(offer_id)
-    console.log(payout)
+        console.log(offer_id)
+        console.log(payout)
 
-    user.updateOne({
-        $inc: {
-            balance: payout
-        }
-    }, function (err, user) {
-        if (err) throw err
-        console.log(user)
-        console.log("update user complete")
-    })
-    }catch{}
+        user.updateOne({
+            $inc: {
+                balance: payout
+            }
+        }, function (err, user) {
+            if (err) throw err
+            console.log(user)
+            console.log("update user complete")
+        })
+    } catch { }
     res.status(200)
 
 })
@@ -245,11 +266,11 @@ app.get("/dashboard", auth, async (req, res) => {
 
                     let RTET = 0.0
                     response.data.offers.forEach((offer) => {
-                        RTET +=  parseFloat((offer.payout) * 0.7 * 100);
-                    })1
+                        RTET += parseFloat((offer.payout) * 0.7 * 100);
+                    })
                     res.render('dashboard', { layout: 'loggedin.hbs', User: user.toObject(), ip: req.iq, offers: response.data, RTET: RTET.toFixed(2) });
-                }).catch((response)={
-                    
+                }).catch((response) = {
+
                 })
 
 
