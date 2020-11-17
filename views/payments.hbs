@@ -1,0 +1,92 @@
+{{> menu2}}
+
+
+<div class="container">
+    <div class='box'>
+
+
+
+        <div class="notification is-link is-light">
+
+            Available to withdraw:
+            <strong>{{User.balance}}$</strong>.</br> Your prefered payment mode:  <strong>{{sysToHuman User.prefpayment}}</strong>.
+
+        </div>
+        <div class='section'>
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        Payment schedule is set to daily.
+                    </p>
+                </header>
+                </header>
+                <div class="card-content">
+                    <div class="content">
+                        You must meet the minimum payment threshold, as described below, in order to receive
+                        payment.</br> Unpaid earnings accumulate in your account until your balance reaches the
+                        threshold, then you'll be paid on the next scheduled payment date on your registered email address: <strong>{{User.email}}</strong>.
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        Minimums Required to Receive Payment:
+                    </p>
+                </header>
+                </header>
+                <div class="card-content">
+                    <div class="content">
+                        Google Play Gift Card: $50, Apple Gift Card: $50, Bitcoin: $100.<br>
+                        <div class="notification is-warning is-light">
+                            100 Vc equals 1$. </br>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+    <div class='box'>
+        <div class='section'>
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        Change Your Payment Details
+                    </p>
+                </header>
+                <div class="card-content">
+                    <div class="content">
+                        <form>
+                            <div class="select is-fullwidth">
+                                <select id='prefpayment'>
+                                    <option>Google Play Gift Card</option>
+                                    <option>Apple Gift Card</option>
+                                    <option>Amazon Gift Card</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <div class="control"> <input class="input is-large" id='password' type="password"
+                                        placeholder="Payment Email">
+                                </div>
+                            </div>
+                        </form>
+                        <button class="button is-block is-info is-large is-fullwidth" name="submit"
+                            id="submit">Save Changes</button>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="/js/main.js"></script>

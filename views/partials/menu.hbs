@@ -1,0 +1,46 @@
+<nav class="navbar is-fixed-top is-warning" role="navigation" aria-label="main navigation">
+
+  <div class="navbar-brand">
+    <a class="navbar-item" href="/dashboard">
+      <img src="images/VULCANADS.png" width="152" height="28">
+    </a>
+    <a href="/dashboard" class="navbar-item">
+        Dashboard
+      </a>
+
+
+  </div>
+
+  <div class="navbar-menu">
+    <div class="navbar-start">
+      
+
+      <a href='/tutorial' class="navbar-item">
+        Tutorial
+      </a>
+
+    </div>
+
+  </div>
+
+  <div class="navbar-end" style="margin-right: 15px;">
+    <div class="navbar-item has-dropdown is-hoverable">
+      <a class="navbar-link">
+        User: {{User.affid}}
+      </a>
+
+      <div class="navbar-dropdown">
+        <a href='/payments' class="navbar-item">
+          Payments
+        </a>
+        <hr class="navbar-divider">
+        <a id="logout" class="navbar-item">
+          Log Out
+        </a>
+      </div>
+
+    </div>
+  </div>
+  </div>
+
+</nav>

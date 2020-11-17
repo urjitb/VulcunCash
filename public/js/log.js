@@ -4,7 +4,8 @@ if (typeof $.cookie('token') === 'undefined'){
     window.location.replace("/dashboard");
    }
 $("#submit").click(function () {
-
+    $('#submit').html('<i class="fa fa-refresh fa-lg fa-spin" style="color: #ffffff;"></i>');
+   
     $.post("/login",
         {
             email: $('#loginName').val(),
@@ -16,7 +17,8 @@ $("#submit").click(function () {
             
             window.location.replace("/dashboard");
         }).fail((data)=>{
-                $("#header-content").after("<br><div class=\"alert alert-danger\">The email and password combination does not exist.</div>")
+            $('#submit').html('Login')
+                $("#header-content").html("<br><div class=\"notification is-danger\">The email and password combination does not exist.</div>")
                     console.log(JSON.stringify(data))
         });
 });

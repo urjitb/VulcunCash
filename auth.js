@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 module.exports = function(req, res, next) {
 
   const token = req.cookies.token
-  if (!token) return res.status(401).redirect('/');
+  if (!token) return res.status(401).redirect('/login');
 
   try {
     const decoded = jwt.verify(token, process.env.authToken);

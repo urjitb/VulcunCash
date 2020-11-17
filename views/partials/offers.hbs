@@ -1,0 +1,27 @@
+<div class="container">
+    <div class="columns is-multiline" style="padding-top: 35px">
+        {{#each offers.offers}}
+        <div class="column is-12">
+            <a href={{this.link}}>
+                <div class="card effect7">
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-left">
+                                <figure class="image is-50x50">
+                                    <img src="{{this.picture}}" alt="Placeholder image">
+                                </figure>
+                            </div>
+                            <div class="media-content">
+                                <p class="title is-4">{{this.name}}</p>
+                                <p class="is-6">{{this.adcopy}}</p>
+                                <p class="is-4"><b>Payout:</b> {{foo this.payout}} Vc</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </a>
+        </div>
+        {{/each}}
+    </div>
+</div>

@@ -4,12 +4,19 @@ if (typeof $.cookie('token') === 'undefined'){
     window.location.replace("/dashboard");
    }
 $("#submit").click(function () {
-
+    $('#submit').html('<i class="fa fa-refresh fa-lg fa-spin" style="color: #ffffff;"></i>');
+   
     $.post("/register",
-        {
-            username: $("[name='username']").val(),
-            password: $("[name='password']").val(),
-            email: $("[name='email']").val()
+        {   
+            email: $("#email").val(),
+            password: $("#password").val(),
+            fname: $("#fname").val(),
+            lname: $("#lname").val(),
+            country: $("#country").val(),
+            state: $("#state").val(),
+            wfrom: $("#wfrom").val(),
+            wexp: $("#wexp").val(),
+            prefpayment: $("#prefpayment").val(),
         },
         function (data, status) {
             document.cookie = "token="+data.token +"; SameSite=Strict; Secure; HttpOnly";
@@ -17,8 +24,9 @@ $("#submit").click(function () {
         }).done(function() {
           })
           .fail(function(data) {
+            $('#submit').html('Register')
             data.responseJSON.errors.forEach(element => {
-                $('#'+element.param).after("<br><div class=\"alert alert-danger\">"+element.msg+"</div>")
+                $('#header-content').html("<br><div class=\"notification is-danger\">"+element.msg+"</div>")
             });
           });
 });
