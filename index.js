@@ -182,4 +182,4 @@ app.get("/admin", adminAuth, async (req, res) => {
     }
 });
 
-app.listen(3000, () => console.log("Started at 3000"));
+app.listen(3001, () => console.log("Started at 3001"));
