@@ -64,7 +64,7 @@ app.get('/', lpauth, async function (req, res, next) {
         const user = await Users.findById((req.user.id));
         res.render('landing1', { layout: 'landing', User: user.toObject() });
     }
-    catch {
+    catch(e) {
         const user = ""
         res.render('landing1', { layout: 'landing', User: user });
     }
@@ -76,7 +76,7 @@ app.get('/vc1000', lpauth, async function (req, res, next) {
         const user = await Users.findById((req.user.id));
         res.render('landing1', { layout: 'landing', User: user.toObject() });
     }
-    catch {
+    catch(e) {
         const user = ""
         res.render('landing1', { layout: 'landing',countdown: true, User: user });
     }
@@ -120,7 +120,7 @@ app.get('/postb', async (req, res) => {
             console.log(user)
             console.log("update user complete")
         })
-    } catch { }
+    } catch(e) { }
     res.status(200)
 
 })
