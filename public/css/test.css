@@ -1,90 +1,111 @@
-
-@import url(https://fonts.googleapis.com/css?family=Lato);
-
-@import url(https://fonts.googleapis.com/css?family=Open+Sans);
-
-.faq-heading {  
-  font-weight: 400;
-  font-size: 19px;
-   -webkit-transition: text-indent 0.2s;
-  text-indent: 20px;
-  color: #333;
+:focus {
+  outline: none;
 }
 
-.faq-text { 
-  font-weight: 400;
-  color: #919191;
-  width:95%;
-  padding-left:20px;
-  margin-bottom:30px;
+div + div {
+  clear: both;
 }
 
-.faq {
-  width: 1000px;
-  margin: 0 auto;
-  background: white;
-  border-radius: 4px;
-  position: relative;
-  border: 1px solid #E1E1E1;
+p {
+  line-height: 1.4em;
+  color: #9e9e9e;
 }
-.faq label {
-  display: block;
-  position: relative;
-  overflow: hidden;
+
+.faq-title {
+  font-size: 2em;
+  margin: 0.4em 0;
+}
+
+div.seperator {
+  width: 7.5em;
+  background-color: #ffdd57;
+  height: 0.07em;
+  margin-left: -1.8em;
+}
+
+.faq-list > div {
+  border-bottom: 0.07em solid #ededed;
+  padding: 1em 0em;
+} 
+
+.faq-list > div:last-child {
+  border: initial;
+}
+
+summary {
+  font-size: 1.4em;
+  font-weight: bold;
   cursor: pointer;
-  height: 100px;
-  padding-top:1px;
- 
-  background-color: #FAFAFA;
-  border-bottom: 1px solid #E1E1E1;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none; 
+  user-select: none;
 }
 
-.faq input[type="checkbox"] {
-  display: none;
+summary:hover {
+  color:#ffdd57;
+  transition: all 0.3s ease;
 }
 
-
-.faq .faq-arrow {
-  width: 5px;
-  height: 5px;
-  transition: -webkit-transform 0.8s;
-  transition: transform 0.8s;
-  transition: transform 0.8s, -webkit-transform 0.8s;
-  -webkit-transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  border-top: 2px solid rgba(0, 0, 0, 0.33);
-  border-right: 2px solid rgba(0, 0, 0, 0.33);
-  float: right;
-  position: relative;
-  top: -30px;
-  right: 27px;
-  -webkit-transform: rotate(45deg);
-          transform: rotate(45deg);
+details[open] summary ~ * {
+animation: sweep .5s ease-in-out;
 }
 
- .faq input[type="checkbox"]:checked + label > .faq-arrow {
-  transition: -webkit-transform 0.8s;
-  transition: transform 0.8s;
-  transition: transform 0.8s, -webkit-transform 0.8s;
-  -webkit-transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  -webkit-transform: rotate(135deg);
-          transform: rotate(135deg);
-}
- .faq input[type="checkbox"]:checked + label {
-  display: block;
-  background: rgba(255,255,255,255) !important;
-  color: #4f7351;
-  height: 225px;
-  transition: height 0.8s;
-  -webkit-transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+@keyframes sweep {
+0%    {opacity: 0; margin-left: -10px}
+100%  {opacity: 1; margin-left: 55px}
 }
 
- .faq input[type='checkbox']:not(:checked) + label {
-  display: block;
-  transition: height 0.8s;
-  height: 60px;
-  -webkit-transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+details[open] summary {
+color: #ffdd57;
 }
 
-::-webkit-scrollbar {
-  display: none;
+details[open] p {
+  border-left: 2px solid #ffdd57;
+  margin-left: 55px;
+  padding-left: 25px;
+  opacity: 100;
+  transition: all 3s ease;
+}
+
+details[open] summary:after {
+  content: "-";
+  font-size: 3.2em;
+  margin: -0.5em 0.14em 0 0;
+  font-weight: 200;
+}
+
+.faq-body {
+  width: 70em;
+  margin: 4em auto;
+  box-shadow: 0px 0px 16px #5b5b5b;
+  border-radius: 0.2em;
+  padding: 5em;
+  background-color: #fff;
+}
+
+.faq-list {
+  width: 55em;
+  margin: 1em auto;
+  padding: 2em 0;
+}
+
+summary::-webkit-details-marker {
+  display: none
+}
+
+summary:after {
+  background: transparent;
+  border-radius: 0.3em;
+  content: "+";
+  color: #ffdd57;
+  float: left;
+  font-size: 1.8em;
+  font-weight: bold;
+  margin: -0.3em 0.25em 0 0;
+  padding: 0;
+  text-align: center;
+  width: 25px;
 }

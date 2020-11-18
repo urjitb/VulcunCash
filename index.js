@@ -296,8 +296,9 @@ app.get("/admin", adminAuth, async (req, res) => {
 
 app.get("/tutorial", auth, async (req, res) => {
     try {
+        
         const user = await Users.findById(req.user.id);
-        res.render('tutorial', { layout: 'loggedin.hbs', User: user.toObject() });
+        res.render('tutorial',  { layout: 'loggedin.hbs', User: user.toObject() });
 
     } catch (e) {
         res.send({ message: "Error in Fetching user" });
