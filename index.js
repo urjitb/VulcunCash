@@ -260,8 +260,8 @@ app.get("/dashboard", auth, async (req, res) => {
         const user = await Users.findById(req.user.id);
         axios.get('https://geolocation-db.com/json/09ba3820-0f88-11eb-9ba6-e1dd7dece2b8/' + req.ip)
             .then(function (response) {
-                console.log(user.affid)
-                axios.get('https://mobverify.com/api/v1/?affiliateid=74530&country=' + 'US' + '&device=' + getDeviceType(req.get('User-Agent')) + '&ctype=15&aff_sub5=' + user.affid, function (data) {
+                //console.log(response.data.country_code)
+                axios.get('https://mobverify.com/api/v1/?affiliateid=74530&country=' + response.data.country_code + '&device=' + getDeviceType(req.get('User-Agent')) + '&ctype=15&aff_sub5=' + user.affid, function (data) {
                 }).then(function (response) {
 
                     let RTET = 0.0
