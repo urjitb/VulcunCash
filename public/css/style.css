@@ -32,7 +32,8 @@ right:10px;
             transform:skew(8deg) rotate(3deg);
 }
 html, body {
-  font-family: monospace !important;
+  font-family: Roboto, Noto, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
     background-color: #f5f5f5; 
   }
 
@@ -143,10 +144,7 @@ li span {
 }
 
 
-p{
-  display: block;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
+.is-vertical-center {
+  display: flex;
+  align-items: center;
 }

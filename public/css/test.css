@@ -6,10 +6,7 @@ div + div {
   clear: both;
 }
 
-p {
-  line-height: 1.4em;
-  color: #9e9e9e;
-}
+
 
 .faq-title {
   font-size: 2em;

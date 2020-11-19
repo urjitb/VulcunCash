@@ -1,21 +1,23 @@
 <div class="container">
-    <div class="columns is-multiline" style="padding-top: 35px">
+    <div class="columns is-multiline is-mobile" style="padding-top: 35px">
         {{#each offers.offers}}
-        <div class="column is-12">
+        <div class="column is-12 ">
             <a href={{this.link}}>
                 <div class="card effect7">
                     <div class="card-content">
-                        <div class="media">
+                        <div class="media  is-vertical-center">
                             <div class="media-left">
-                                <figure class="image is-50x50">
+                                <figure class="image is-48x48">
                                     <img src="{{this.picture}}" alt="Placeholder image">
+                                    
                                 </figure>
                             </div>
-                            <div class="media-content">
-                                <p class="title is-4">{{this.name}}</p>
-                                <p class="is-6">{{this.adcopy}}</p>
-                                <p class="is-4"><b>Payout:</b> {{foo this.payout}} Vc</p>
+                            <div class="media-content" >
+                                
+                                <p class="title is-7">{{this.adcopy}}</p>
+                                
                             </div>
+                            <div class="media-right" ><p class="is-size-7"><b>Payout</p ></b><p class="title is-6">{{foo this.payout}} Vc</p></div>
                         </div>
                     </div>
                 </div>
