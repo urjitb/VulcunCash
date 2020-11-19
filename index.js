@@ -56,7 +56,7 @@ app.set('trust proxy', true)
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api', api)
 app.use(cookieParser())
-app.use(static(path.join(__dirname, 'public')))
+app.use(static(path.join(__dirname, 'public'),{dotfiles: 'allow'}))
 
 
 app.get('/', lpauth, async function (req, res, next) {
