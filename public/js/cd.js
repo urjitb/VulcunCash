@@ -12,6 +12,7 @@ if (Cookies.get('visitTime') === undefined) {
     //86400 24 hrs
 }
 
+if ($('#count').length){
 (function () {
 
     const second = 1000,
@@ -30,4 +31,4 @@ if (Cookies.get('visitTime') === undefined) {
 
         //seconds
     }, 0)
-}());
+}())}else{};
