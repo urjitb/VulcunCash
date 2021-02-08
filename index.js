@@ -10,7 +10,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require("jsonwebtoken")
 const auth = require("./auth");
 const lpauth = require("./lpauth");
-const adminAuth = require("./adminAuth");
+const adminAuth = require("./adminAuth.js");
 const dotenv = require('dotenv').config();
 const { body, validationResult } = require('express-validator');
 const axios = require('axios').default;
@@ -37,9 +37,10 @@ var hbs = exphbs.create({
     // Specify helpers which are only registered on this instance.
     helpers: {
         foo: function (str) { return (parseFloat((parseFloat(str, 10) * 0.7 * 100)).toFixed(2)); },
+        json:   function (str) { JSON.stringify(str);},
         bar: function (str) { return (parseFloat(str, 10)).toFixed(2); },
         dollarToVc: function (str) { return (parseFloat(parseFloat(str, 10) * 100).toFixed(2)); },
-        sysToHuman: function (str) {
+        sysToHuman: function (str) {t
             if (str === "apple") return "Apple Gift Card"
             else if (str === "google") return "Google Gift Card"
             else if (str === "amazon") return "Amazon Gift Card"
@@ -87,6 +88,10 @@ app.get('/login', function (req, res, next) {
     res.render('login', { layout: 'main' });
 });
 
+app.get('/optin', function (req, res, next) {
+    res.render('optin');
+});
+
 app.get('/register', function (req, res, next) {
     res.render('register', { layout: 'main' });
 });
@@ -130,6 +135,7 @@ app.post('/register', [
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        console.log(errors.array())
         return res.status(400).json({ errors: errors.array() });
     }
     const {
@@ -144,21 +150,18 @@ app.post('/register', [
         wexp
 
     } = req.body;
-
+    console.log(email)
     let user = await Users.findOne({
         email
     });
-
+    //console.log(user)
     if (user) {
         //console.log(user)
-        return res.status(400).json({
-            msg: "User Already Exists"
-
-        });
+        return res.status(400).json({ errors: [{msg:'User Already Exists'}] })
 
     }
     let affid = await Users.collection.countDocuments() + 10047
-    console.log(affid)
+    console.log(Users.collection.countDocuments())
     //else add it to the Users model
     user = new Users({
         email,
@@ -259,6 +262,7 @@ app.get("/dashboard", auth, async (req, res) => {
         const user = await Users.findById(req.user.id);
         axios.get('https://geolocation-db.com/json/09ba3820-0f88-11eb-9ba6-e1dd7dece2b8/' + req.ip)
             .then(function (response) {
+
                 //console.log(response.data.country_code)
                 axios.get('https://mobverify.com/api/v1/?affiliateid=74530&country=' + response.data.country_code + '&device=' + getDeviceType(req.get('User-Agent')) + '&ctype=15&aff_sub5=' + user.affid, function (data) {
                 }).then(function (response) {
@@ -271,8 +275,6 @@ app.get("/dashboard", auth, async (req, res) => {
                 }).catch((response) = {
 
                 })
-
-
             });
 
     } catch (e) {
@@ -283,14 +285,48 @@ app.get("/dashboard", auth, async (req, res) => {
 
 app.get("/admin", adminAuth, async (req, res) => {
     try {
+
         const user = await Users.findById(req.user.id);
-        res.render('admin');
+
+        let role = user.role
+        
+        if (role==="admin"){
+            
+        Users.find({}, function(err, users) {
+            if (err) {
+               console.log(err);
+            } else {
+                
+                users.forEach((eachUser,index)=>{
+             
+              })
+            }
+         
+            res.render('admin',{ layout: 'loggedin.hbs', Admin: user.toObject(), allUsers:JSON.stringify(users)})
+           
+          })
+          
+
+
+        }
+        else{
+            res.send('BUSTED!')
+        }
+        
 
     } catch (e) {
 
         res.send({ message: "Error in Fetching user" });
 
     }
+});
+
+app.post('/admin',adminAuth, async (req, res) => {
+    const value = await req.to_range
+
+    console.log(value)
+    res.json({rangeVal:value})
+    
 });
 
 app.get("/faq", auth, async (req, res) => {
