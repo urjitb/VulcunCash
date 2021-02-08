@@ -92,6 +92,12 @@ app.get('/optin', function (req, res, next) {
     res.render('optin', { layout: 'main' });
 });
 
+
+app.get('/thankyou', function (req, res, next) {
+    res.render('thankyou', { layout: 'main' });
+});
+
+
 app.get('/register', function (req, res, next) {
     res.render('register', { layout: 'main' });
 });
