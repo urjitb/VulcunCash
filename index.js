@@ -89,7 +89,7 @@ app.get('/login', function (req, res, next) {
 });
 
 app.get('/optin', function (req, res, next) {
-    res.render('optin');
+    res.render('optin', { layout: 'main' });
 });
 
 app.get('/register', function (req, res, next) {
